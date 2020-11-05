@@ -1,0 +1,73 @@
+<h3 class="card-title">Signup</h3>
+<form #SignupForm="ngForm" (ngSubmit)='submit(SignupForm)'>
+  <div class="form-group">
+    <label>Username</label>
+    <input type="text" name="username" class="form-control" required [(ngModel)]="SignupUserData.username"
+      #username="ngModel">
+    <div class="form-error form-username-error" *ngIf="!username.valid && username.touched">
+      This username is not available
+    </div>
+  </div>
+  <div class="form-group">
+    <label>Email</label>
+    <input type="email" name="email" class="form-control" required [ngModel]='SignupUserData.email' #email="ngModel"
+      [email]="true">
+    <div class="form-error form-email-error" *ngIf="!email.valid && email.touched">
+      This is not correct email
+    </div>
+  </div>
+  <div class="form-group">
+    <label>Password</label>
+    <input type="password" name="password" class="form-control" required ngModel #password="ngModel"
+      pattern="^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{7,})\S$">
+    <div class="form-error form-password-error" *ngIf="!password.valid && password.touched">
+      Password should have at least 8 characters including one uppercase, one lowercase and one number
+    </div>
+  </div>
+  <div class="form-group">
+    <label>Repeat Password</label>
+    <input type="password" name="password_match" class="form-control" required ngModel #repeatPass="ngModel"
+    ngValidateEqual="password" >
+    <div class="form-error form-password_match-error"  *ngIf="(repeatPass.dirty || repeatPass.touched) && repeatPass.invalid">
+      <p class="warning-text" *ngIf="repeatPass.hasError('notEqual') && password.valid">
+      Passwords should match
+    </div>
+  </div>
+  <div class="form-group">
+    <label>Phone Number</label>
+    <input ngModel class="form-control" name="phoneNumber" type="tel" required [ngModel]='SignupUserData.phoneNumber'
+      #phoneNumber="ngModel" pattern='^((\+0?1\s)?)\(?\d{3}\)?[\s.\s]\d{3}[\s.-]\d{4}$'>
+    <div class="form-error form-phonenumber-error" *ngIf="!phoneNumber.valid && phoneNumber.touched">
+      This phone number is invalid. Valid format is (999) 999-9999
+    </div>
+  </div>
+  <div class="form-group">
+    <label>Country</label>
+    <select class="form-control" name="country" required (change)="onChangeCountry($event)"
+      [ngModel]='SignupUserData.country' #country="ngModel">
+      <option [defaultSelected] value="">--Select Country--</option>
+      <option *ngFor="let country of countriesList" [value]="country.id">
+        {{country.name}}
+      </option>
+    </select>
+    <div class="form-error form-country-error" *ngIf="!country.valid && country.touched">
+      This country is not available
+    </div>
+  </div>
+  <div class="form-group">
+    <label>State</label>
+    <select class="form-control"  name="state" required [ngModel]='SignupUserData.state' #state="ngModel">
+      <option selected value="">--Select State--</option>
+      <option *ngFor="let state of statesList"  [ngValue]="state.id">
+        {{state.name}}
+      </option>
+    </select>
+    <div class="form-error form-state-error" *ngIf="!state.valid && state.touched">
+      This state is not available
+    </div>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary btn-block" type="submit" [disabled]="!SignupForm.form.valid">Sign
+      up</button>
+  </div>
+</form>
